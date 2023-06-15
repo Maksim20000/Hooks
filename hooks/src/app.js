@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import TodoList from './TodoList'
 
 // export class App extends Component {
@@ -26,16 +26,34 @@ import TodoList from './TodoList'
 // }
 
 export const App = () => {
-    const [todos, setTodos] = useState([
-            {id: 1, title: 'First todo', completed: false},
-            {id: 2, title: 'Second todo', completed: true},
-        ])
-
+    const [todos, setTodos] = useState([])
     const [todoTitle, setTodoTitile] = useState('')
 
     const onChangeTodoTitle = (e) => {
         setTodoTitile(e.target.value)
     }
+    // component did mount
+    useEffect(() => {
+        let raw = localStorage.getItem('todos') || []
+        // "[{\"id\":1686789727401,\"title\":\"1221\",\"completed\":false},{\"id\":1686789729147,\"title\":\"1221\",\"completed\":false}]"
+        // если приходит вот такая фигня использую этот метод
+        setTodos(JSON.parse(raw))
+    }, [])
+
+
+    const handleClick = () => {
+        console.log('click')
+    }
+
+    useEffect(() => {
+        document.addEventListener('click', handleClick)
+        // save on localHost dataBase
+        localStorage.setItem('todos', JSON.stringify(todos))
+
+        return() => {
+            document.removeEventListener('click', handleClick)
+        }
+    }, [todos])
 
 
     const addTodo = (event) => {

@@ -1,0 +1,39 @@
+import {useState} from "react";
+
+export const App = () => {
+    // const [name, setName] = useState('Backbencher')
+    // const [age, setAge] = useState(23)
+
+    const [profile, setProfile] = useState({
+        name: "Backbencher",
+        age: 23
+    })
+    const onNameChange = (e) => {
+        setProfile({...profile, name: e.target.value});
+    }
+
+    const onAgeChange = (e) => {
+        setProfile({...profile, age: e.target.value})
+    };
+
+    return (
+        <div>
+            <form>
+                <input
+                    type="text"
+                    value={profile.name}
+                    onChange={onNameChange}
+                />
+                <input
+                    type="number"
+                    value={profile.age}
+                    onChange={onAgeChange}
+                />
+                <h2>
+                    Name: {profile.name}, Age: {profile.age}
+                </h2>
+            </form>
+        </div>
+    );
+
+}
