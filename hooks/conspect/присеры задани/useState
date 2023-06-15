@@ -1,3 +1,32 @@
+1) кнопка +-
+import React, { useState } from "react";
+
+export function App() {
+  const [count, setCount] = useState(0);
+
+  const incrementCount = () => {
+      // в скоюках он забирает начальный state
+    setCount((prevCount2) => {
+      return prevCount2 + 1;
+    });
+  };
+
+  const decrementCount = () => {
+    setCount((prevCount2) => {
+      return prevCount2 - 1;
+    });
+  };
+
+  return (
+      <div>
+        <strong>Count: {count}</strong>
+        <button onClick={incrementCount}>Increment</button>
+        <button onClick={decrementCount}>Decrement</button>
+      </div>
+  );
+}
+
+2) изменение name и age
 import {useState} from "react";
 
 export const App = () => {

@@ -1,0 +1,73 @@
+1) прибовляем 1
+export const App = () => {
+    const [count, setCount] = useState(0)
+
+
+    // componentDidMount and componentDidUpdate - методы жизненного цикла.
+    // Такие побочные эффекты можно сделать с помощью useEffect
+    // это функция которая принимает callBack
+    // и этот колбек вызывается каждый раз когда происходит рендер
+    useEffect(() => {
+        console.log("Boom")
+    })
+
+    const updateState = () => {
+        setCount(count + 1)
+    }
+    return (
+        <div>
+            <button onClick={updateState}>State: {count}</button>
+        </div>
+    );
+}
+
+2) счетчик нужно чтобы каждый раз не вызывался код а только при изменении счетчика
+
+export function App() {
+    const [count, setCount] = useState(0);
+    const [name, setName] = useState("");
+
+
+    // эта функция выховится только тогда когда count будет изменен
+    useEffect(() => {
+        console.log("Счетчик обновлен");
+    }, [count]);
+
+    return (
+        <div>
+            <button onClick={() => setCount(count + 1)}>State: {count}</button>
+            <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+            />
+        </div>
+    );
+}
+
+3) задача на время
+export const App = () => {
+    const [data, setData] = useState(new Date())
+
+    // componentDidMount - метод жизненного цикла который выполняется всего 1 раз
+    // если мы что-то вставим в массив то он постоянно будет изменяться, чтобы предотвратить
+    // это нужно оставить этот массив пустым
+    useEffect(() => {
+        console.log('dkkfd')
+        setInterval(() => {
+            setData(new Date(),);
+        }, 1000);
+    }, [])
+
+    return <div>{data.toString()}</div>
+}
+
+
+4) очистка от загрязнения
+useEffect(() => {
+    window.addEventListener("mousemove", handleMousePosition);
+
+    return () => {
+        window.removeEventListener("mousemove", handleMousePosition);
+    }
+}, []);
