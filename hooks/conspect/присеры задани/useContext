@@ -34,3 +34,10 @@
                  return todos
              }))
          }
+
+     3) в месте где вызываем
+     Если передаем state
+
+     // важно чтобы был именно массив
+       const {state} = useContext(Context)
+
