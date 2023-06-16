@@ -52,7 +52,31 @@ export const App = () => {
         }
     }
 
+    // удаляем id которое пришло в параметрах
+    const removeTodo = (id) => {
+        // todos если не равгно id которого мы хотим убрать то мы просто перересовываем весь state
+        // сначала обычные поищутся потом когда дойдет очередь до id настоящего то вернется false и она просто удалится
+        setTodos(todos.filter(todos => {
+            // если придет id которой рае=вен id то чтобы удалить это нужно чтобы возвращалось false
+            if(todos.id !== id){
+                return todos
+            }
+            // если будет равен ===
+            else{
+                return null
+            }
+        }))
+    }
 
+    const toggleTodo = (id) => {
+        setTodos(todos.filter(todos => {
+            if (todos.id === id) {
+                // тоесть он переприсваевает значение которое приходит на противоположное
+                todos.completed = !todos.completed
+            }
+            return todos
+        }))
+    }
     return (
         <Context.Provider value={{
             toggleTodo, removeTodo
