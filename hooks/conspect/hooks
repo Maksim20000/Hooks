@@ -29,3 +29,6 @@ useState - Хук useState() отвечает за работу с состоя�
     return() => {
                 document.removeEventListener('click', handleClick)
             }
+
+3)
+

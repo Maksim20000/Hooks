@@ -1,29 +1,11 @@
 import React, {useEffect, useState} from 'react'
 import TodoList from './TodoList'
+import {Context} from './assets/context'
 
-// export class App extends Component {
-//     state = {
-//         todos: [
-//             {id: 1, title: 'First todo', completed: false},
-//             {id: 2, title: 'Second todo', completed: true},
-//         ]
-//     }
-//
-//     render() {
-//         return (
-//             <div className="container">
-//                 <h1>Todo app</h1>
-//
-//                 <div className="input-field">
-//                     <input type="text" />
-//                     <label>Todo name</label>
-//                 </div>
-//
-//                 <TodoList todos={this.state.todos} />
-//             </div>
-//         );
-//     }
-// }
+// todos: [
+//     {id: 1, title: 'First todo', completed: false},
+//     {id: 2, title: 'Second todo', completed: true},
+// ]
 
 export const App = () => {
     const [todos, setTodos] = useState([])
@@ -50,14 +32,14 @@ export const App = () => {
         // save on localHost dataBase
         localStorage.setItem('todos', JSON.stringify(todos))
 
-        return() => {
+        return () => {
             document.removeEventListener('click', handleClick)
         }
     }, [todos])
 
 
     const addTodo = (event) => {
-        if(event.key === 'Enter'){
+        if (event.key === 'Enter') {
             setTodos([
                 ...todos,
                 {
@@ -69,22 +51,28 @@ export const App = () => {
             setTodoTitile('')
         }
     }
+
+
     return (
-        <div className="container">
-            <h1>Todo app</h1>
+        <Context.Provider value={{
+            toggleTodo, removeTodo
+        }}>
+            <div className="container">
+                <h1>Todo app</h1>
 
-            <div className="input-field">
-                <input type="text"
-                       value={todoTitle}
-                       onChange={onChangeTodoTitle}
-                       // при нажатиит на enter добавляем todo
-                       onKeyPress={addTodo}
-                />
-                <label>Todo name</label>
+                <div className="input-field">
+                    <input type="text"
+                           value={todoTitle}
+                           onChange={onChangeTodoTitle}
+                        // при нажатиит на enter добавляем todo
+                           onKeyPress={addTodo}
+                    />
+                    <label>Todo name</label>
+                </div>
+
+                 <TodoList todos={todos}/>
             </div>
-
-            <TodoList todos={todos}/>
-        </div>
+        </Context.Provider>
     );
 
 }
