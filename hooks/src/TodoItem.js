@@ -1,14 +1,24 @@
 import React, {useContext} from 'react'
 import {Context} from "./assets/context";
 
-export default function TodoItem({title, id, completed}) {
+export default function TodoItem(props) {
     // поставлена ли галочка возле поля
-    const {toggleTodo, removeTodo} = useContext(Context)
+    const {dispatch} = useContext(Context)
 
     const cls = ['todo']
 
-    if(completed){
+    if(props.completed){
         cls.push('completed')
+    }
+
+    const toggleTodoCreator = {
+        type: 'toggle-todo',
+        id: props.id
+    }
+
+    const removeTodoCreator = {
+        id: props.id,
+        type: 'remove-todo'
     }
 
     return (
@@ -16,13 +26,13 @@ export default function TodoItem({title, id, completed}) {
             <label>
                 <input
                     type="checkbox"
-                    checked={completed}
-                    onChange = {() => toggleTodo(id)}
+                    checked={props.completed}
+                    onChange = {() => dispatch(toggleTodoCreator)}
                 />
-                <span>{title}</span>
+                <span>{props.title}</span>
 
                 <button
-                    onClick={() => removeTodo(id)}
+                    onClick={() => dispatch(removeTodoCreator)}
                     className="material-icons red-text"
                 >
                     delete

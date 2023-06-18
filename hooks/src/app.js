@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useReducer, useState} from 'react'
 import TodoList from './TodoList'
 import {Context} from './assets/context'
+import {Reducer} from "./reducer";
 
 // todos: [
 //     {id: 1, title: 'First todo', completed: false},
@@ -8,19 +9,14 @@ import {Context} from './assets/context'
 // ]
 
 export const App = () => {
-    const [todos, setTodos] = useState([])
+    // const [todos, setTodos] = useState([])
     const [todoTitle, setTodoTitile] = useState('')
+
+    const [state, dispatch] = useReducer(Reducer, JSON.parse(localStorage.getItem('todos')))
 
     const onChangeTodoTitle = (e) => {
         setTodoTitile(e.target.value)
     }
-    // component did mount
-    useEffect(() => {
-        let raw = localStorage.getItem('todos') || []
-        // "[{\"id\":1686789727401,\"title\":\"1221\",\"completed\":false},{\"id\":1686789729147,\"title\":\"1221\",\"completed\":false}]"
-        // если приходит вот такая фигня использую этот метод
-        setTodos(JSON.parse(raw))
-    }, [])
 
 
     const handleClick = () => {
@@ -28,58 +24,29 @@ export const App = () => {
     }
 
     useEffect(() => {
-        document.addEventListener('click', handleClick)
         // save on localHost dataBase
-        localStorage.setItem('todos', JSON.stringify(todos))
+        localStorage.setItem('todos', JSON.stringify(state))
 
         return () => {
             document.removeEventListener('click', handleClick)
         }
-    }, [todos])
+    }, [state])
 
 
     const addTodo = (event) => {
         if (event.key === 'Enter') {
-            setTodos([
-                ...todos,
-                {
-                    id: Date.now(),
-                    title: todoTitle,
-                    completed: false
-                }
-            ])
+            dispatch({
+                type: 'add',
+                title: todoTitle
+            })
+
             setTodoTitile('')
         }
     }
 
-    // удаляем id которое пришло в параметрах
-    const removeTodo = (id) => {
-        // todos если не равгно id которого мы хотим убрать то мы просто перересовываем весь state
-        // сначала обычные поищутся потом когда дойдет очередь до id настоящего то вернется false и она просто удалится
-        setTodos(todos.filter(todos => {
-            // если придет id которой рае=вен id то чтобы удалить это нужно чтобы возвращалось false
-            if(todos.id !== id){
-                return todos
-            }
-            // если будет равен ===
-            else{
-                return null
-            }
-        }))
-    }
-
-    const toggleTodo = (id) => {
-        setTodos(todos.filter(todos => {
-            if (todos.id === id) {
-                // тоесть он переприсваевает значение которое приходит на противоположное
-                todos.completed = !todos.completed
-            }
-            return todos
-        }))
-    }
     return (
         <Context.Provider value={{
-            toggleTodo, removeTodo
+            dispatch
         }}>
             <div className="container">
                 <h1>Todo app</h1>
@@ -94,7 +61,7 @@ export const App = () => {
                     <label>Todo name</label>
                 </div>
 
-                 <TodoList todos={todos}/>
+                 <TodoList todos={state}/>
             </div>
         </Context.Provider>
     );
